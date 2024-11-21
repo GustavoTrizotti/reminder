@@ -3,7 +3,47 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+    <link rel="icon" type="image/x-icon" href="../assets/reminder.svg" />
+    <link rel="stylesheet" href="../styles/create-reminder.css" />
+    <link rel="stylesheet" href="../styles/index.css" />
+    <title>Reminder - Reminders</title>
   </head>
-  <body></body>
+  <body class="dark container">
+    <div>
+      <a href="../pages/reminders.html" style="gap: 1em">
+        <i class="bi bi-arrow-left"></i>
+        <span>Go Back</span>
+      </a>
+    </div>
+    <main>
+      <div>
+        <img src="../assets/reminder.svg" alt="Reminder Icon" />
+        <h1>Write your reminder</h1>
+        <h3>What do you need to remeber today?</h3>
+      </div>
+      <form>
+        <textarea
+          name="reminder"
+          id="reminder"
+          maxlength="255"
+          class="textarea"
+          required
+          placeholder="Your reminder start here..."
+        ></textarea>
+        <div>
+          <button type="submit" class="button light" style="gap: 1em">
+            <i class="bi bi-download"></i>
+            <span>Save Reminder</span>
+          </button>
+          <button type="reset" class="button medium">
+            <span>Clear</span>
+          </button>
+        </div>
+      </form>
+    </main>
+  </body>
 </html>
