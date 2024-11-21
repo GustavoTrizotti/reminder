@@ -1,0 +1,141 @@
+.landing-navbar {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 0.5em;
+  border-bottom: 2px solid rgba(var(--medium-rgba), 0.15);
+}
+
+.landing-navbar .landing-navbar-logo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1em;
+  padding: 0.5em;
+}
+
+.landing-navbar .landing-navbar-logo img {
+  width: 1.5em;
+}
+
+.landing-navbar ul {
+  display: flex;
+  flex-grow: 1;
+  gap: 2em;
+  padding: 0 2em;
+  justify-content: flex-start;
+  flex-direction: row;
+  list-style: none;
+}
+
+.landing-navbar a {
+  color: var(--light);
+  text-decoration: none;
+}
+
+.landing-navbar li:hover {
+  transition: all 0.3s ease 0s;
+}
+
+.landing-navbar li:hover {
+  scale: 1.05;
+}
+
+.landing-navbar .landing-navbar-auth {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1em;
+  flex-grow: 1;
+}
+
+.landing-main {
+  position: relative;
+  flex-grow: 1;
+  flex-direction: column;
+  gap: 1em;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.landing-main img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 12em;
+  opacity: 0.05;
+  user-select: none;
+  pointer-events: none;
+}
+
+.landing-main h1 {
+  font-size: 2em;
+  max-width: 60%;
+  text-align: center;
+  font-weight: 600;
+}
+
+.landing-main h1 > span {
+  background: -webkit-linear-gradient(45deg, var(--light), var(--medium));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.landing-main h3 {
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+.landing-main .landing-main-actions {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+}
+
+@media only screen and (max-width: 400px) {
+  .landing-navbar {
+    display: flex;
+    gap: 1em;
+    padding-bottom: 1em;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .landing-navbar ul {
+    display: none;
+  }
+
+  .landing-navbar .landing-navbar-logo h1 {
+    font-size: 1em;
+  }
+
+  .landing-navbar .landing-navbar-logo img {
+    width: 1em;
+  }
+}
+
+@media only screen and (max-width: 512px) {
+  .landing-main h1 {
+    text-align: center;
+    max-width: 80%;
+    font-size: 1.5em;
+  }
+
+  .landing-main h3 {
+    display: none;
+    font-size: 0.8em;
+  }
+
+  .landing-main img {
+    width: 10em;
+  }
+}
