@@ -7,6 +7,11 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
     />
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
     <link rel="icon" type="image/x-icon" href="../assets/reminder.svg" />
     <link rel="stylesheet" href="../styles/create-reminder.css" />
     <link rel="stylesheet" href="../styles/index.css" />
@@ -46,4 +51,18 @@
       </form>
     </main>
   </body>
+
+  <script>
+    $(document).ready(() => {
+      const queryString = new URLSearchParams(window.location.search);
+      const data = queryString.get("reminder");
+      if (data) {
+        const { id, texto } = JSON.parse(data);
+        $("h1").text("Edit your reminder");
+        $("button[type=submit] span").text("Update Reminder");
+        $("button[type=submit] i").attr("class", "bi bi-cloud-upload-fill");
+        $("textarea").val(texto);
+      }
+    });
+  </script>
 </html>
