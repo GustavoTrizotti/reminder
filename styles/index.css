@@ -41,6 +41,10 @@
   font-family: "Poppins", sans-serif;
 }
 
+.hidden {
+  display: none;
+}
+
 .dark {
   background-color: var(--dark);
   color: var(--light);

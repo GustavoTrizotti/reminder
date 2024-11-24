@@ -18,21 +18,69 @@
     <title>Reminder - Reminders</title>
   </head>
   <body class="dark container-home">
-    <aside>
-      <div class="home-aside-logo">
+    <div class="loading">
+      <img src="../assets/reminder.svg" id="reminder-loading" alt="Loading" />
+      <h1>Loading</h1>
+      <span>Fetching page resources...</span>
+    </div>
+    <div class="content hidden">
+      <aside>
+        <div class="home-aside-logo">
+          <img src="../assets/reminder.svg" alt="Reminder Logo" />
+          <h1>Reminder</h1>
+        </div>
+        <div class="home-aside-menu">
+          <span class="menu-label">Reminds</span>
+          <ul>
+            <li>
+              <a
+                href="./reminders.html"
+                class="button light"
+                style="justify-content: start; gap: 0.5em"
+              >
+                <i class="bi bi-sticky-fill" style="opacity: 0.5"></i>
+                <span>My Reminders</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="./create-reminder.html"
+                class="button dark"
+                style="justify-content: start; gap: 0.5em"
+              >
+                <i class="bi bi-plus" style="opacity: 0.5"></i>
+                <span>New Reminder</span>
+              </a>
+            </li>
+          </ul>
+          <div class="home-aside-menu-footer">
+            <div>
+              <span class="menu-label">User</span>
+              <span>johndoe@email.com</span>
+            </div>
+            <button type="button" class="button dark" id="logout">
+              <i class="bi bi-box-arrow-left"></i>
+            </button>
+          </div>
+        </div>
+      </aside>
+      <div class="no-content">
         <img src="../assets/reminder.svg" alt="Reminder Logo" />
-        <h1>Reminder</h1>
+        <h2>You don't have any reminders!</h2>
+        <a href="./create-reminder.html" class="button light">
+          <i class="bi bi-plus"></i>
+          <span>Create a new reminder</span>
+        </a>
       </div>
-      <div class="home-aside-menu">
-        <span class="menu-label">Reminds</span>
+      <main class="hidden"></main>
+      <footer>
+        <div class="footer-icon">
+          <img src="../assets/reminder.svg" alt="Reminder Logo" />
+        </div>
         <ul>
           <li>
-            <a
-              href="./reminders.html"
-              class="button light"
-              style="justify-content: start; gap: 0.5em"
-            >
-              <i class="bi bi-sticky-fill" style="opacity: 0.5"></i>
+            <a href="./reminders.html" class="button light" style="gap: 0.5em">
+              <i class="bi bi-sticky-fill"></i>
               <span>My Reminders</span>
             </a>
           </li>
@@ -40,53 +88,80 @@
             <a
               href="./create-reminder.html"
               class="button dark"
-              style="justify-content: start; gap: 0.5em"
+              style="gap: 0.5em"
             >
-              <i class="bi bi-plus" style="opacity: 0.5"></i>
+              <i class="bi bi-plus"></i>
               <span>New Reminder</span>
             </a>
           </li>
         </ul>
-        <div class="home-aside-menu-footer">
-          <div>
-            <span class="menu-label">User</span>
-            <span>johndoe@email.com</span>
-          </div>
-          <a href="./login.html" class="button dark">
-            <i class="bi bi-box-arrow-left"></i>
-          </a>
-        </div>
-      </div>
-    </aside>
-    <main></main>
-    <footer>
-      <div class="footer-icon">
-        <img src="../assets/reminder.svg" alt="Reminder Logo" />
-      </div>
-      <ul>
-        <li>
-          <a href="./reminders.html" class="button light" style="gap: 0.5em">
-            <i class="bi bi-sticky-fill"></i>
-            <span>My Reminders</span>
-          </a>
-        </li>
-        <li>
-          <a
-            href="./create-reminder.html"
-            class="button dark"
-            style="gap: 0.5em"
-          >
-            <i class="bi bi-plus"></i>
-            <span>New Reminder</span>
-          </a>
-        </li>
-      </ul>
-      <a href="./login.html" class="button dark">
-        <i class="bi bi-box-arrow-left"></i>
-      </a>
-    </footer>
+        <button type="button" class="button dark" id="logout">
+          <i class="bi bi-box-arrow-left"></i>
+        </button>
+      </footer>
+    </div>
 
     <script>
+      const BASE_URL = "https://ifsp.ddns.net/webservices/lembretes";
+      const CONTENT_TYPE = "application/json";
+      const TOKEN_KEY = "token";
+      const TOKEN_REFRESH_TIME = 1000 * 60 * 2; // 2 minutes
+
+      const routes = {
+        user: "/usuario",
+        reminder: "/lembrete",
+      };
+
+      function queryData(endpoint = "") {
+        return new Promise((resolve, reject) => {
+          $.ajax({
+            url: BASE_URL + endpoint,
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
+            },
+            success: (response) => {
+              resolve(response);
+            },
+            error: (error) => {
+              reject(error);
+            },
+          });
+        });
+      }
+
+      function mutateData(endpoint = "", method = "POST", data = {}) {
+        return new Promise((resolve, reject) => {
+          $.ajax({
+            url: BASE_URL + endpoint,
+            method: method,
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
+            },
+            contentType: CONTENT_TYPE,
+            data: JSON.stringify(data),
+            success: (response) => {
+              resolve(response);
+            },
+            error: (error) => {
+              reject(error);
+            },
+          });
+        });
+      }
+
+      const reminderController = {
+        findOne: (id) => {
+          return queryData(`${routes.reminder}/${id}`);
+        },
+        findAll: () => {
+          return queryData(routes.reminder);
+        },
+        remove: (id) => {
+          return mutateData(`${routes.reminder}/${id}`, "DELETE");
+        },
+      };
+
       function removeReminder(reminderId) {
         try {
           const gridChildren = $("main").children();
@@ -145,36 +220,145 @@
         grid.append(cardRoot);
       }
 
-      Array.from({ length: 5 }).map((element, i) =>
-        createReminder({
-          id: i + 1,
-          texto:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer pellentesque ex id est pulvinar, non tempor turpis finibus. Pellentesque viverra nisi ut erat laoreet ultrices.",
-          data: new Date(),
-          idUsuario: "945",
-        })
-      );
+      function updateReminder(reminder) {
+        const { id, texto, data, idUsuario } = reminder;
+        $(`div#${id} > div.card-body > .reminder-content`).text(texto);
+        $(`div#${id} > div.card-body > .reminder-date`).text(
+          new Date(data).toLocaleString()
+        );
+      }
 
-      createReminder({
-        id: 6,
-        texto: "Não esquecer de assassinar o presidente hoje.",
-        data: new Date(),
-        idUsuario: "945",
+      async function loadReminders() {
+        const response = await reminderController.findAll();
+        if (response && response.length > 0) {
+          response.forEach((reminder) => createReminder(reminder));
+        }
+      }
+
+      // Remove Reminder
+      $(document).on("click", "button[name=remove-btn]", async (e) => {
+        try {
+          const button = $(e.target).closest("button[name=remove-btn]");
+          const reminderId = parseInt(button.attr("id"));
+          const response = await reminderController.remove(reminderId);
+          if (response) {
+            removeReminder(reminderId);
+          }
+          if (!hasReminders()) {
+            $("main").addClass("hidden");
+            $(".no-content").removeClass("hidden");
+          }
+        } catch (error) {
+          alert(error.responseJSON.msg || "Failed to remove reminder.");
+        }
       });
 
-      $("button[name=remove-btn]").click((e) => {
-        const button = $(e.target).closest("button[name=remove-btn]");
-        const reminderId = parseInt(button.attr("id"));
-        removeReminder(reminderId);
-      });
-
-      $("button[name=update-btn]").click((e) => {
+      // Update Reminder
+      $(document).on("click", "button[name=update-btn]", (e) => {
         const button = $(e.target).closest("button[name=update-btn]");
         const reminderId = parseInt(button.attr("id"));
         let reminderText = $(`div#${reminderId} > div.card-body > p`).text();
         const data = { id: reminderId, texto: reminderText };
         const query = encodeURIComponent(JSON.stringify(data));
         window.location.href = `./create-reminder.html?reminder=${query}`;
+      });
+
+      $(document).on("click", "#logout", () => {
+        $.ajax({
+          url: BASE_URL + routes.user + "/logout",
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
+          },
+          success: (response) => {
+            localStorage.removeItem(TOKEN_KEY);
+            window.location.href = "./login.html";
+          },
+          error: (error) => {
+            console.log(error);
+            alert("Failed to log out. Please, try again.");
+          },
+        });
+      });
+
+      const authStrategy = {
+        isTokenValid: () => {
+          const token = localStorage.getItem("token");
+          if (!token) {
+            return false;
+          }
+          const parsedToken = authStrategy.parseJwt(token);
+          return parsedToken.exp * 1000 > Date.now();
+        },
+        parseJwt: (token) => {
+          var base64Url = token.split(".")[1];
+          var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+          var jsonPayload = decodeURIComponent(
+            window
+              .atob(base64)
+              .split("")
+              .map(function (c) {
+                return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+              })
+              .join("")
+          );
+          return JSON.parse(jsonPayload);
+        },
+        refreshToken: () => {
+          const previousValidToken = localStorage.getItem("token");
+          if (!previousValidToken) {
+            return;
+          }
+
+          $.ajax({
+            url: BASE_URL + routes.user + "/renew",
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${previousValidToken}`,
+            },
+            success: (response) => {
+              const { token } = response;
+              if (!token) {
+                alert("Failed to renew token. Please, log-in again.");
+                window.location.href = "./login.html";
+              }
+              localStorage.setItem("token", token);
+            },
+            error: (error) => {
+              console.log(error);
+              alert("Failed to renew token. Please, log-in again.");
+              window.location.href = "./login.html";
+            },
+          });
+        },
+      };
+
+      function hasReminders() {
+        const childrenLength = $("main").children().length;
+        return childrenLength > 0;
+      }
+
+      $(document).ready(async () => {
+        const token = localStorage.getItem("token");
+        const queryString = new URLSearchParams(window.location.search);
+        const data = queryString.get("mutate");
+
+        if (!authStrategy.isTokenValid()) {
+          alert("You must be logged in to access this page.");
+          window.location.href = "./login.html";
+        } else {
+          $(".loading").addClass("hidden");
+          await loadReminders();
+          if (hasReminders()) {
+            $(".no-content").addClass("hidden");
+            $("main").removeClass("hidden");
+          }
+          $(".content").removeClass("hidden");
+        }
+
+        setInterval(() => {
+          authStrategy.refreshToken();
+        }, TOKEN_REFRESH_TIME);
       });
     </script>
   </body>

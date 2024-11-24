@@ -10,13 +10,78 @@
   justify-content: space-between;
 }
 
+.content {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  width: 100%;
+  height: 100%;
+}
+
+.loading {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  gap: 1em;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading h1 {
+  font-size: 2em;
+  font-weight: 600;
+  animation: textLoading 1.5s infinite ease-in-out;
+}
+
+.loading span {
+  font-size: 1em;
+  font-weight: 500;
+  opacity: 0.5;
+}
+
+@keyframes textLoading {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+.loading #reminder-loading {
+  width: 4em;
+  animation: playfulSpin 1.5s infinite cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+@keyframes playfulSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(90deg) scale(1.1);
+  }
+  50% {
+    transform: rotate(180deg) scale(0.9);
+  }
+  75% {
+    transform: rotate(270deg) scale(1.1);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
 a {
   text-decoration: none;
 }
 
 aside {
   display: flex;
-  min-width: 15%;
+  max-width: 20%;
   height: 100%;
   padding: 1em;
   flex-direction: column;
@@ -91,11 +156,35 @@ ul {
   width: fit-content;
 }
 
+.no-content {
+  display: flex;
+  position: relative;
+  flex-grow: 1;
+  gap: 2em;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.no-content img {
+  position: absolute;
+  z-index: 0;
+  width: 10em;
+  opacity: 0.15;
+  rotate: -25deg;
+}
+
+.no-content h2,
+a {
+  z-index: 1;
+}
+
 main {
   display: grid;
   height: 100%;
-  gap: 2em;
-  grid-template-columns: 1fr 1fr 1fr;
+  flex-grow: 1;
+  gap: 1em;
+  grid-template-columns: 1fr 1fr;
   overflow-y: auto;
 }
 
@@ -206,6 +295,13 @@ main {
 }
 
 @media only screen and (max-width: 1280px) {
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    height: 100%;
+  }
+
   .container-home {
     display: flex;
     flex-grow: 1;
@@ -285,5 +381,21 @@ main {
 
   footer ul li span {
     display: none;
+  }
+
+  .no-content img {
+    position: absolute;
+    z-index: 0;
+    width: 5em;
+    opacity: 0.15;
+    rotate: -25deg;
+  }
+
+  .no-content h2 {
+    font-size: 1em;
+  }
+
+  .no-content a {
+    font-size: 0.8em;
   }
 }
